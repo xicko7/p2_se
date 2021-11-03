@@ -8,11 +8,13 @@ int check_button()
 void init_button()
 {
 	SIM_COPC = 0; // Deshabilitar reloxo
+	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
+
 	PORTC_PCR3 = PORT_PCR_MUX(1);
 	PORTC_PCR3 |= ((uint32_t)(((uint32_t)(1)) << PORT_PCR_PE_SHIFT)) & PORT_PCR_PE_MASK;
-	PORTC_PCR3 |= ((uint32_t)(((uint32_t)(0)) << PORT_PCR_PS_SHIFT)) & PORT_PCR_PS_MASK;
-	GPIOC_PDDR &= (0 << 5); // Input
-	GPIOC_PSOR = (0 << 5);
+	// PORTC_PCR3 &= ((uint32_t)(((uint32_t)(0)) << PORT_PCR_PS_SHIFT)) & PORT_PCR_PS_MASK;
+	// GPIOC_PDDR &= (); // Input
+	// GPIOC_PSOR &= (0 << 3);
 }
 
 void led_green_init()
@@ -50,12 +52,12 @@ int delay(void)
 
 	for (i = 0; i < 1000000; i++)
 	{
-		// if (check_button() /*& !(i % 1000)*/)
-		// {
-		// 	led_red_toggle();
-		// 	led_green_toggle();
-		// 	res = !res;
-		// }
+		if (check_button() & !(i % 1000))
+		{
+			led_red_toggle();
+			led_green_toggle();
+			res = !res;
+		}
 	}
 	return res;
 }
@@ -64,7 +66,7 @@ int main(void)
 {
 	led_red_init();
 	led_green_init();
-	//init_button();
+	init_button();
 
 	int green_red = 0; // Empeza co verde
 	// O primeiro toggle encende o led
