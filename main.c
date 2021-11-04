@@ -1,6 +1,6 @@
 #include "includes/MKL46Z4.h"
 
-#define sleep 1000000
+#define sleep 1500000
 #define BUTTON_MASK 0x8u
 
 void init_button()
